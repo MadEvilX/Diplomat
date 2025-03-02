@@ -9,6 +9,14 @@ const pool = new Pool({
     password: '123', // Пароль пользователя
     port: 5432,          // Порт, на котором работает PostgreSQL
 });
+// Тестовый запрос
+pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+        console.error('Ошибка подключения к базе данных:', err);
+    } else {
+        console.log('Подключение к базе данных успешно:', res.rows[0]);
+    }
+});
 
 // Экспортируем pool, чтобы его можно было использовать в других файлах
 module.exports = pool;
