@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 // Импортируем модель Book
-const Book = require('../models/Book');
+const Book = require('../models/book');
 
 // Маршрут для получения всех книг
 router.get('/', async (req, res) => {
