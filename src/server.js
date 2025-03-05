@@ -4,6 +4,7 @@ const express = require('express');
 const booksRouter = require('./routes/books'); // Импортируем роутер для книг
 const usersRouter = require('./routes/users'); // Импортируем роутер для пользователей
 const loansRouter = require('./routes/loans'); // Импортируем роутер для выдачи книг
+const authRouter = require('./routes/auth'); // Импортируем роутер для авторизации
 
 // Создаем экземпляр приложения
 const app = express();
@@ -23,6 +24,7 @@ app.use('/books', booksRouter);
 // Подключаем маршруты для выдачи книг
 app.use('/loans', loansRouter);
 
+app.use('/auth', authRouter);
 // Запускаем сервер
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
