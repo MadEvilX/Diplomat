@@ -72,6 +72,20 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+const roleMiddleware = require('../middleware/roleMiddleware');
+
+// Только администратор может добавлять книги
+router.post('/', roleMiddleware(['admin']), async (req, res) => {
+    const { title, author, year, genre } = req.body;
+
+    try {
+        const newBook = await Book.add(title, author, year, genre);
+        res.status(201).json(newBook);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
 const authMiddleware = require('../middleware/auth');
 
 // Защищенный маршрут для получения всех книг

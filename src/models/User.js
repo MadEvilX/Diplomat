@@ -47,6 +47,24 @@ class User {
         // Возвращаем удаленного пользователя
         return rows[0];
     }
+
+    static async register(name, email, role, password) {
+        // Проверяем, что роль допустима
+        const validRoles = ['admin', 'librarian', 'student'];
+        if (!validRoles.includes(role)) {
+            throw new Error('Недопустимая роль');
+        }
+
+        // Хешируем пароль
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Выполняем SQL-запрос для добавления пользователя
+        const { rows } = await pool.query(
+            'INSERT INTO users (name, email, role, password) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, email, role, hashedPassword]
+        );
+        return rows[0];
+    }
 }
 
 // Экспортируем класс User для использования в других частях приложения
