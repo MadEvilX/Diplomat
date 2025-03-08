@@ -6,28 +6,21 @@ const usersRouter = require('./routes/users'); // Импортируем роу�
 const loansRouter = require('./routes/loans'); // Импортируем роутер для выдачи книг
 const authRouter = require('./routes/auth'); // Импортируем роутер для авторизации
 const errorHandler = require('./middleware/errorHandler');
+const path = require('path'); // Импортируем модуль path
 
-// Создаем экземпляр приложения
-const app = express();
+const app = express();// Создаем экземпляр приложения
 
-// Указываем порт, на котором будет работать сервер
-const port = 3000;
+const port = 3000;// Указываем порт, на котором будет работать сервер
 
-// Middleware для обработки JSON
-app.use(express.json());
+app.use(express.json());// Middleware для обработки JSON
 
-// Подключаем маршруты для пользователей
-app.use('/users', usersRouter);
-
-// Подключаем маршруты для книг
-app.use('/books', booksRouter);
-
-// Подключаем маршруты для выдачи книг
-app.use('/loans', loansRouter);
-
+app.use('/users', usersRouter);// Подключаем маршруты для пользователей
+app.use('/books', booksRouter);// Подключаем маршруты для книг
+app.use('/loans', loansRouter);// Подключаем маршруты для выдачи книг
 app.use('/auth', authRouter);
 
-app.use(errorHandler);
+app.use(express.static(path.join(__dirname, '../public')));// Middleware для обслуживания статических файлов
+app.use(errorHandler);// Middleware для обработки ошибок
 
 // Запускаем сервер
 app.listen(port, () => {

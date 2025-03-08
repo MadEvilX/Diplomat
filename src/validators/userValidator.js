@@ -6,6 +6,12 @@ const registerSchema = Joi.object({
     email: Joi.string().email().required(),
     role: Joi.string().valid('admin', 'librarian', 'student').required(),
     password: Joi.string().min(6).required(),
+    group: Joi.string()
+        .pattern(/^\d{2}-[А-Я]{2}-\d{3}$/) // Регулярное выражение для группы
+        .required()
+        .messages({
+            'string.pattern.base': 'Группа должна быть в формате AA-BB-CDD',
+        }),
 });
 
 // Схема для входа пользователя

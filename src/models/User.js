@@ -48,7 +48,7 @@ class User {
         return rows[0];
     }
 
-    static async register(name, email, role, password) {
+    static async register(name, email, role, password, group) {
         // Проверяем, что роль допустима
         const validRoles = ['admin', 'librarian', 'student'];
         if (!validRoles.includes(role)) {
