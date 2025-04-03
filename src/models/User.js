@@ -1,5 +1,6 @@
 // Импортируем пул подключений к базе данных
 const pool = require('../db');
+const bcrypt = require('bcryptjs');
 
 class User {
     // Статический метод для добавления нового пользователя
@@ -40,14 +41,7 @@ class User {
         return rows[0];
     }
 
-    // Статический метод для удаления пользователя
-    static async delete(id) {
-        // Выполняем SQL-запрос для удаления пользователя
-        const { rows } = await pool.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
-        // Возвращаем удаленного пользователя
-        return rows[0];
-    }
-
+    // Статический метод для регистрации нового пользователя
     static async register(name, email, role, password, group) {
         // Проверяем, что роль допустима
         const validRoles = ['admin', 'librarian', 'student'];
@@ -58,11 +52,15 @@ class User {
         // Хешируем пароль
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Если роль не "student", устанавливаем group в NULL
+        const groupValue = role === 'student' ? group : null;
+
         // Выполняем SQL-запрос для добавления пользователя
         const { rows } = await pool.query(
-            'INSERT INTO users (name, email, role, password) VALUES ($1, $2, $3, $4) RETURNING *',
-            [name, email, role, hashedPassword]
+            'INSERT INTO users (name, email, role, password, "group") VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [name, email, role, hashedPassword, groupValue]
         );
+
         return rows[0];
     }
 }

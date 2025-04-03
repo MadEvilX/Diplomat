@@ -14,6 +14,8 @@ const port = 3000;// Указываем порт, на котором будет
 
 app.use(express.json());// Middleware для обработки JSON
 
+
+
 app.use('/users', usersRouter);// Подключаем маршруты для пользователей
 app.use('/books', booksRouter);// Подключаем маршруты для книг
 app.use('/loans', loansRouter);// Подключаем маршруты для выдачи книг
@@ -26,3 +28,6 @@ app.use(errorHandler);// Middleware для обработки ошибок
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
 });
+
+const cors = require('cors');
+app.use(cors()); // Разрешить все домены (для разработки)

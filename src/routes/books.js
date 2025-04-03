@@ -97,5 +97,20 @@ router.get('/', authMiddleware, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+const checkRole = require('../middleware/roleMiddleware');
+
+// Получение всех книг (доступно библиотекарям и админам)
+router.get('/', checkRole(['librarian', 'admin']), async (req, res) => {
+    const books = await Book.getAll();
+    res.json(books);
+});
+
+// Добавление книги (только админ)
+router.post('/', checkRole('admin'), async (req, res) => {
+    const newBook = await Book.add(req.body);
+    res.status(201).json(newBook);
+});
+
 // Экспортируем роутер
 module.exports = router;

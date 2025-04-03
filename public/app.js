@@ -84,4 +84,40 @@ document.addEventListener('DOMContentLoaded', () => {
       usersList.innerHTML = '<li>Ошибка при загрузке данных</li>';
       console.error('Ошибка при загрузке пользователей:', error);
     });
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById('login-form');
+  if (!loginForm) return;
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Ошибка сервера');
+      }
+
+      localStorage.setItem('token', data.token);
+      window.location.href = data.user.role === 'admin'
+        ? '/admin/dashboard.html'
+        : '/librarian/books.html';
+
+    } catch (err) {
+      console.error('Ошибка входа:', err);
+      alert(err.message);
+    }
+  });
 });

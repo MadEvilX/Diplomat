@@ -10,3 +10,12 @@ const roleMiddleware = (allowedRoles) => (req, res, next) => {
 };
 
 module.exports = roleMiddleware;
+
+module.exports = (requiredRole) => (req, res, next) => {
+    const user = req.user; // Получаем из JWT-токена
+
+    if (user.role !== requiredRole) {
+        return res.status(403).json({ message: 'Доступ запрещён' });
+    }
+    next();
+};

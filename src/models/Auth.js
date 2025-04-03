@@ -19,30 +19,30 @@ class Auth {
 
     // Статический метод для входа пользователя
     static async login(email, password) {
-        // Выполняем SQL-запрос для получения пользователя по email
+        console.log('Вход для:', email);
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
-        // Если пользователь не найден, выбрасываем ошибку
-        if (rows.length === 0) {
+        if (!rows.length) {
+            console.log('Пользователь не найден');
             throw new Error('Пользователь не найден');
         }
 
-        // Сравниваем введенный пароль с хешированным паролем в базе данных
         const user = rows[0];
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        console.log('Найден пользователь:', user.email);
+        console.log('Хеш в БД:', user.password);
 
-        // Если пароль неверный, выбрасываем ошибку
-        if (!isPasswordValid) {
-            throw new Error('Неверный пароль');
-        }
-        // Создаем JWT-токен
-        const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role }, // Полезная нагрузка токена
-            'your-secret-key', // Секретный ключ (замените на что-то более безопасное)
-            { expiresIn: '1h' } // Время жизни токена
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log('Результат сравнения паролей:', isMatch); // Должно быть true
+
+        if (!isMatch) throw new Error('Неверный пароль');
+    }
+
+    static async updatePassword(email, newPassword) {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await pool.query(
+            'UPDATE users SET password = $1 WHERE email = $2',
+            [hashedPassword, email]
         );
-
-        return { token, user };// Возвращаем токен и информацию о пользователе
     }
 }
 
