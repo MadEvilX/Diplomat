@@ -1,5 +1,7 @@
 // Импортируем express
 const express = require('express');
+require('dotenv').config();
+console.log('JWT_SECRET:', process.env.JWT_SECRET); // Проверка
 
 const booksRouter = require('./routes/books'); // Импортируем роутер для книг
 const usersRouter = require('./routes/users'); // Импортируем роутер для пользователей
@@ -23,11 +25,11 @@ app.use('/auth', authRouter);
 
 app.use(express.static(path.join(__dirname, '../public')));// Middleware для обслуживания статических файлов
 app.use(errorHandler);// Middleware для обработки ошибок
+const cors = require('cors');
+app.use(cors()); // Разрешить все домены (для разработки)
 
 // Запускаем сервер
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
 });
 
-const cors = require('cors');
-app.use(cors()); // Разрешить все домены (для разработки)

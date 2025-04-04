@@ -21,6 +21,7 @@ router.post('/login', async (req, res) => {
         console.log('Ошибка входа:', err.message); // [!]
         res.status(400).json({ message: err.message });
     }
+
 });
 
 module.exports = router;

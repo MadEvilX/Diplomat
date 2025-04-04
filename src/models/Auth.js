@@ -19,22 +19,39 @@ class Auth {
 
     // Статический метод для входа пользователя
     static async login(email, password) {
-        console.log('Вход для:', email);
+        // 1. Проверка пользователя
         const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-
-        if (!rows.length) {
-            console.log('Пользователь не найден');
-            throw new Error('Пользователь не найден');
-        }
+        if (!rows.length) throw new Error('Пользователь не найден');
 
         const user = rows[0];
-        console.log('Найден пользователь:', user.email);
-        console.log('Хеш в БД:', user.password);
 
+        // 2. Проверка пароля
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log('Результат сравнения паролей:', isMatch); // Должно быть true
-
         if (!isMatch) throw new Error('Неверный пароль');
+
+        // 3. Генерация токена
+        if (!process.env.JWT_SECRET) {
+            throw new Error('JWT_SECRET не настроен!');
+        }
+
+        const token = jwt.sign(
+            { userId: user.id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        console.log('[DEBUG] Токен сгенерирован:', token); // Логирование
+
+        // 4. Формируем ответ
+        return {
+            token,
+            user: {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                name: user.name
+            }
+        };
     }
 
     static async updatePassword(email, newPassword) {

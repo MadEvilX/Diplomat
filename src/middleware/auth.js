@@ -12,7 +12,10 @@ const authMiddleware = (req, res, next) => {
 
     try {
         // Проверяем токен
-        const decoded = jwt.verify(token, 'your-secret-key'); // Используйте тот же секретный ключ, что и при создании токена
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET // И здесь!
+        );
         // Добавляем информацию о пользователе в объект запроса
         req.user = decoded;
         next();
