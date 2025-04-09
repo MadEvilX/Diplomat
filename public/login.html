@@ -4,47 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход для администрации</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-        }
-
-        .login-form {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 5px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        button {
-            background: #4CAF50;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-        }
-    </style>
+    <title>Библиотека - Вход для персонала</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 
 <body>
-    <div class="login-form">
-        <h2>Вход в систему</h2>
-        <form id="login-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Пароль" required>
-            <button type="submit">Войти</button>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="/assets/library-logo.svg" alt="Логотип библиотеки" class="logo">
+            <h1>Система управления библиотекой</h1>
+            <p>Вход только для авторизованного персонала</p>
+        </div>
+
+        <form id="login-form" class="login-form">
+            <div class="input-group">
+                <label for="email">Служебный email</label>
+                <input type="email" id="email" required autocomplete="off" spellcheck="false">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" required autocomplete="current-password">
+                    <button type="button" class="toggle-password" aria-label="Показать пароль">👁️</button>
+                </div>
+            </div>
+
+            <div id="error-message" class="error-message" aria-live="assertive"></div>
+
+            <button type="submit" class="login-button">
+                <span class="button-text">Войти</span>
+                <span class="spinner hidden"></span>
+            </button>
         </form>
+
+        <div class="security-notice">
+            <p>⚠️ Это защищенная система. Несанкционированный доступ запрещен.</p>
+            <p>При проблемах со входом обратитесь к системному администратору.</p>
+        </div>
     </div>
-    <script src="app.js"></script>
+
+    <script src="/js/login.js"></script>
 </body>
 
 </html>

@@ -3,37 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Панель администратора</title>
-    <style>
-        .menu {
-            background: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        .menu a {
-            color: white;
-            margin-right: 15px;
-        }
-    </style>
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="/public/css/styles.css">
 </head>
 
 <body>
-    <div class="menu">
-        <a href="/admin/dashboard.html">Главная</a>
-        <a href="/admin/users.html">Пользователи</a>
+    <div class="sidebar">
+        <a href="/admin/dashboard.html" class="active">Главная</a>
         <a href="/admin/books.html">Книги</a>
-        <a id="logout">Выйти</a>
+        <a href="/admin/users.html">Пользователи</a>
+        <button id="logout">Выйти</button>
     </div>
 
-    <h1>Панель управления</h1>
+    <div class="content">
+        <h1>Статистика</h1>
+        <div class="stats">
+            <div class="stat-card" id="total-books"></div>
+            <div class="stat-card" id="total-users"></div>
+        </div>
+    </div>
 
-    <script>
-        document.getElementById('logout').addEventListener('click', () => {
-            localStorage.removeItem('token');
-            window.location.href = '/login.html';
-        });
-    </script>
+    <script src="/public/js/app.js"></script>
 </body>
 
 </html>

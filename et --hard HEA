@@ -1,0 +1,77 @@
+[33mcommit 6b510c8048f990c91f0953002efb750cc244566e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Fri Apr 4 09:00:05 2025 +0300
+
+    Токен работает, вход осуществляется
+
+[33mcommit 05892fc01abebc506430ee0b7f8994d791e2c5bd[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Thu Apr 3 21:26:40 2025 +0300
+
+    Убрал регистрацию, всё ещё нужно починить вход
+
+[33mcommit b559d1d63798538b3086b43c22041bf1eee738d7[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Sun Mar 9 00:09:27 2025 +0300
+
+    начал фронтенд, сделал 4 страницы, книги, пользователи, логин и главная
+
+[33mcommit 2dddbd6c7b35c7c474deafe1da235a62b642c175[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Fri Mar 7 00:09:48 2025 +0300
+
+    Теперь бэкенд: Поддерживает роли и права доступа Проверяет входные данные с помощью валидации, Логирует запросы и ошибки, Централизованно обрабатывает ошибки.
+
+[33mcommit 2e7ccb7824a4934d9729bfe4f9a5cae1079a2ede[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Wed Mar 5 18:44:55 2025 +0300
+
+    Добавил: Регистрация и вход пользователей, Генерация и проверка JWT-токенов, Защита маршрутов с помощью middleware.
+
+[33mcommit 48b78dacda1754b142cc06b6109e39e3d94d5ed2[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Mon Mar 3 23:58:07 2025 +0300
+
+    Создал бд loan и добавил к ним api. Поиск по id, удалить, обновить, добавить (дата показыватся некорректно, на день раньше и с временем.
+
+[33mcommit 850a2de516aace9d51687ba1e49343ba69dd2bb2[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Mon Mar 3 23:14:35 2025 +0300
+
+    Создал бд users и добавил к ним api. Поиск по id, удалить юзера, обновить юзера, добавить юзера
+
+[33mcommit 3d37bfc860c7cf7ee93fb65f98aa29eafe4ccd6f[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Sun Mar 2 23:14:48 2025 +0300
+
+    Добавил 2 api поиск по id и удалить книгу
+
+[33mcommit de6b926f0e11bd93ac064717219e4bda96928489[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Sat Mar 1 13:40:14 2025 +0300
+
+    Подключил БД и проверил API books с помощью curl (в последствии заменить)
+
+[33mcommit 8cbde4ef5e62b1168157d755b548213a5b5b0d84[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Thu Feb 27 00:30:31 2025 +0300
+
+    Добавил сервер, запустил его, создал маршруты и html файл
+
+[33mcommit 1fdb33fc82ec8852c2b6142097be855affeca206[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Thu Feb 27 00:13:01 2025 +0300
+
+    Описание изменений
+
+[33mcommit 608875a5f10eaf644907e10cc4eaee3df1541fe7[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Thu Feb 27 00:09:01 2025 +0300
+
+    Удалил node_modules из репозитория
+
+[33mcommit 44e7c39e73ca04e93499bea4e428e9e93459a113[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Ivan <joony.o@yandex.ru>
+Date:   Wed Feb 26 23:42:57 2025 +0300
+
+    Initial commit

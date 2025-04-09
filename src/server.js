@@ -2,7 +2,7 @@
 const express = require('express');
 require('dotenv').config();
 console.log('JWT_SECRET:', process.env.JWT_SECRET); // Проверка
-
+const cors = require('cors');
 const booksRouter = require('./routes/books'); // Импортируем роутер для книг
 const usersRouter = require('./routes/users'); // Импортируем роутер для пользователей
 const loansRouter = require('./routes/loans'); // Импортируем роутер для выдачи книг
@@ -17,6 +17,16 @@ const port = 3000;// Указываем порт, на котором будет
 app.use(express.json());// Middleware для обработки JSON
 
 
+// Добавьте перед обработчиками маршрутов
+app.use(cors({
+    origin: 'http://localhost:3000', // или ваш домен
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+// Обработка OPTIONS для preflight
+app.options('*', cors());
 
 app.use('/users', usersRouter);// Подключаем маршруты для пользователей
 app.use('/books', booksRouter);// Подключаем маршруты для книг
@@ -25,11 +35,13 @@ app.use('/auth', authRouter);
 
 app.use(express.static(path.join(__dirname, '../public')));// Middleware для обслуживания статических файлов
 app.use(errorHandler);// Middleware для обработки ошибок
-const cors = require('cors');
-app.use(cors()); // Разрешить все домены (для разработки)
 
 // Запускаем сервер
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
 });
 
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
