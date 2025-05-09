@@ -93,9 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
+    // В конце успешного входа (функция redirectUser)
     function redirectUser(role) {
-        window.location.href = role === 'admin'
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('returnUrl');
+
+        const defaultPath = role === 'admin'
             ? '/admin/dashboard.html'
             : '/librarian/books.html';
+
+        window.location.href = returnUrl || defaultPath;
     }
 });
+

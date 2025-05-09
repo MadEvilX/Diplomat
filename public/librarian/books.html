@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог книг | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/school-logo.svg" alt="Логотип школы" height="40">
+                <h1>Каталог книг</h1>
+            </div>
+            <nav class="librarian-nav">
+                <a href="/librarian/books.html" class="active">Книги</a>
+                <button class="logout-btn" id="logout-btn">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="librarian-toolbar">
+            <div class="search-box">
+                <input type="text" id="book-search" placeholder="Поиск книг...">
+                <button id="book-search-btn">Найти</button>
+            </div>
+            <button class="btn-primary" id="loan-book-btn">Выдать книгу</button>
+        </div>
+
+        <div class="books-grid" id="books-list">
+            <!-- Книги будут загружены через JS -->
+        </div>
+
+        <div class="pagination">
+            <button id="prev-page" disabled>Назад</button>
+            <span id="page-info">Страница 1</span>
+            <button id="next-page">Вперёд</button>
+        </div>
+    </main>
+
+    <!-- Модальное окно выдачи книги -->
+    <div class="modal" id="loan-modal">
+        <div class="modal-content">
+            <h2>Выдать книгу</h2>
+            <form id="loan-form">
+                <div class="form-group">
+                    <label for="loan-book">Книга</label>
+                    <input type="text" id="loan-book" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="loan-user">Ученик/Учитель</label>
+                    <select id="loan-user" required>
+                        <!-- Пользователи будут загружены через JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="loan-date">Дата возврата</label>
+                    <input type="date" id="loan-date" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn-primary">Подтвердить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/librarian-books.js"></script>
+</body>
+
+</html>

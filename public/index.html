@@ -4,35 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Библиотека</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <title>Школьная библиотека - Каталог книг</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/books.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
-        <h1>Библиотека</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/admin/books.html">Книги</a></li>
-                <li><a href="/admin/users.html">Пользователи</a></li>
-                <li><a href="/login.html">Вход</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Логотип школы" height="50">
+                <h1>Школьная библиотека</h1>
+            </div>
+            <a href="/login.html" class="login-button">Вход для сотрудников</a>
+        </div>
     </header>
 
-    <main>
-        <section id="content">
-            <h2>Добро пожаловать в библиотеку!</h2>
-            <p>Используйте меню для навигации.</p>
+    <main class="container">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Поиск по названию или автору...">
+                <button id="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <section class="books-section">
+            <h2 class="section-title">Доступные книги</h2>
+
+            <div class="sort-controls">
+                <label>Сортировка:</label>
+                <select id="sort-by">
+                    <option value="title">По названию (А-Я)</option>
+                    <option value="title-desc">По названию (Я-А)</option>
+                    <option value="year">По году (новые)</option>
+                    <option value="year-old">По году (старые)</option>
+                </select>
+            </div>
+
+            <div id="books-list" class="books-grid">
+                <!-- Книги будут загружены через JS -->
+            </div>
+
+            <div class="pagination">
+                <button id="prev-page" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    Назад
+                </button>
+                <span id="page-info">Страница 1</span>
+                <button id="next-page">
+                    Вперёд
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2023 Библиотека</p>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2023 Школьная библиотека. МБОУ СОШ №1</p>
+            <p>Часы работы: Пн-Пт с 9:00 до 17:00</p>
+        </div>
     </footer>
 
-    <script src="/public/js/app.js"></script>
+    <script src="/js/books.js"></script>
 </body>
 
 </html>

@@ -40,6 +40,35 @@ class Book {
         // Возвращаем найденную книгу (или undefined, если книга не найдена)
         return rows[0];
     }
+    // Обновление книги
+    static async update(id, title, author, year, quantity) {
+        const { rows } = await pool.query(
+            `UPDATE books 
+             SET title = $1, author = $2, year = $3, quantity = $4 
+             WHERE id = $5 RETURNING *`,
+            [title, author, year, quantity, id]
+        );
+        return rows[0];
+    }
+
+    // Проверка существования книги
+    static async exists(id) {
+        const { rows } = await pool.query(
+            'SELECT EXISTS(SELECT 1 FROM books WHERE id = $1)',
+            [id]
+        );
+        return rows[0].exists;
+    }
+
+    // Поиск книг по названию/автору
+    static async search(query) {
+        const { rows } = await pool.query(
+            `SELECT * FROM books 
+             WHERE title ILIKE $1 OR author ILIKE $1`,
+            [`%${query}%`]
+        );
+        return rows;
+    }
 
 }
 

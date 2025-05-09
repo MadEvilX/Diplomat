@@ -4,80 +4,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Книги</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Управление книгами | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body>
-    <header>
-        <h1>Книги</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Главная</a></li>
-                <li><a href="/admin/books.html">Книги</a></li>
-                <li><a href="/users.html">Пользователи</a></li>
-                <li><a href="/login.html">Вход</a></li>
-            </ul>
-        </nav>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/school-logo.svg" alt="Логотип школы" height="40">
+                <h1>Управление книгами</h1>
+            </div>
+            <nav class="admin-nav">
+                <a href="/admin/dashboard.html">Главная</a>
+                <a href="/admin/books.html" class="active">Книги</a>
+                <a href="/admin/users.html">Пользователи</a>
+                <button class="logout-btn" id="logout-btn">Выйти</button>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <div class="container">
-            <h1>Управление книгами</h1>
-            <div class="controls">
-                <input type="text" id="search-input" placeholder="Поиск...">
-                <button id="add-book-btn">Добавить книгу</button>
+    <main class="container">
+        <div class="admin-toolbar">
+            <button class="btn-primary" id="add-book-btn">Добавить книгу</button>
+            <div class="search-box">
+                <input type="text" id="book-search" placeholder="Поиск книг...">
+                <button id="book-search-btn">Найти</button>
             </div>
+        </div>
 
-            <table id="books-table">
+        <div class="admin-table-container">
+            <table class="admin-table" id="books-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Название</th>
                         <th>Автор</th>
                         <th>Год</th>
-                        <th>Доступность</th>
+                        <th>Количество</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Книги будут загружены через JS -->
+                </tbody>
             </table>
         </div>
 
-        <!-- Модальное окно -->
-        <div id="book-modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 id="modal-title">Добавить книгу</h2>
-                <form id="book-form">
-                    <input type="hidden" id="book-id">
-                    <div class="form-group">
-                        <label>Название</label>
-                        <input type="text" id="book-title" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Автор</label>
-                        <input type="text" id="book-author" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Год издания</label>
-                        <input type="number" id="book-year" min="1800" max="2025" required>
-                    </div>
-                    <button type="submit">Сохранить</button>
-                </form>
-            </div>
+        <div class="pagination">
+            <button id="prev-page" disabled>Назад</button>
+            <span id="page-info">Страница 1</span>
+            <button id="next-page">Вперёд</button>
         </div>
-        <section id="content">
-            <h2>Список книг</h2>
-            <ul id="books-list"></ul>
-        </section>
     </main>
 
-    <footer>
-        <p>&copy; 2023 Библиотека</p>
-    </footer>
+    <!-- Модальное окно добавления/редактирования -->
+    <div class="modal" id="book-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Добавить книгу</h2>
+            <form id="book-form">
+                <input type="hidden" id="book-id">
+                <div class="form-group">
+                    <label for="book-title">Название</label>
+                    <input type="text" id="book-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-author">Автор</label>
+                    <input type="text" id="book-author" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-year">Год издания</label>
+                    <input type="number" id="book-year" min="1900" max="2099" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-quantity">Количество</label>
+                    <input type="number" id="book-quantity" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-genre">Жанр</label>
+                    <input type="text" id="book-genre" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <script src="/public/js/app.js"></script>
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/admin-books.js"></script>
 </body>
 
 </html>

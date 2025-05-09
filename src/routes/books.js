@@ -1,95 +1,15 @@
-// Импортируем express и создаем роутер
 const express = require('express');
 const router = express.Router();
-
-// Импортируем модель Book
 const Book = require('../models/book');
-
-// Маршрут для получения всех книг
-router.get('/', async (req, res) => {
-    try {
-        // Получаем все книги с помощью метода getAll
-        const books = await Book.getAll();
-        // Отправляем книги в формате JSON
-        res.json(books);
-    } catch (err) {
-        // Если произошла ошибка, отправляем статус 500 и сообщение об ошибке
-        res.status(500).json({ message: err.message });
-    }
-});
-
-router.get('/:id', async (req, res) => {
-    // Извлекаем id книги
-    const { id } = req.params;
-    try {
-        // Пытаемся получить книгу с помощью метода getById
-        const book = await Book.getById(id);
-
-        // Если книга найдена, возвращаем её
-        if (book) {
-            res.json(book);
-        } else {
-            // Если книга не найдена, возвращаем статус 404 и сообщение об ошибке
-            res.status(404).json({ message: 'Книга не найдена' });
-        }
-    } catch (err) {
-        // Если произошла ошибка, возвращаем статус 500 и сообщение об ошибке
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Маршрут для добавления новой книги
-router.post('/', async (req, res) => {
-    // Извлекаем данные из тела запроса
-    const { title, author, year, genre } = req.body;
-    try {
-        // Добавляем новую книгу с помощью метода add
-        const newBook = await Book.add(title, author, year, genre);
-        // Отправляем добавленную книгу в формате JSON с статусом 201 (Created)
-        res.status(201).json(newBook);
-    } catch (err) {
-        // Если произошла ошибка, отправляем статус 400 и сообщение об ошибке
-        res.status(400).json({ message: err.message });
-    }
-});
-
-router.delete('/:id', async (req, res) => {
-    // Извлекаем ID книги из параметров запроса
-    const { id } = req.params;
-    try {
-        // Пытаемся удалить книгу с помощью метода delete
-        const deletedBook = await Book.delete(id);
-        // Если книга удалена, возвращаем успешный ответ
-        if (deletedBook) {
-            res.json({ message: 'Книга успешно удалена', book: deletedBook });
-        } else {
-            // Если книга не найдена, возвращаем статус 404 и сообщение об ошибке
-            res.status(404).json({ message: 'Книга не найдена' });
-        }
-    } catch (err) {
-        // Если произошла ошибка, возвращаем статус 500 и сообщение об ошибке
-        res.status(500).json({ message: err.message });
-    }
-});
-
-const roleMiddleware = require('../middleware/roleMiddleware');
-
-// Только администратор может добавлять книги
-router.post('/', roleMiddleware(['admin']), async (req, res) => {
-    const { title, author, year, genre } = req.body;
-
-    try {
-        const newBook = await Book.add(title, author, year, genre);
-        res.status(201).json(newBook);
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-    }
-});
-
+const { checkRole } = require('../middleware/roleMiddleware');
 const authMiddleware = require('../middleware/auth');
+const { validateBook } = require('../validators/bookValidator');
 
-// Защищенный маршрут для получения всех книг
-router.get('/', authMiddleware, async (req, res) => {
+// Применяем middleware ко всем маршрутам
+router.use(authMiddleware);
+
+// Получение всех книг (для админов и библиотекарей)
+router.get('/', checkRole(['admin', 'librarian']), async (req, res) => {
     try {
         const books = await Book.getAll();
         res.json(books);
@@ -98,19 +18,61 @@ router.get('/', authMiddleware, async (req, res) => {
     }
 });
 
-const checkRole = require('../middleware/roleMiddleware');
-
-// Получение всех книг (доступно библиотекарям и админам)
-router.get('/', checkRole(['librarian', 'admin']), async (req, res) => {
-    const books = await Book.getAll();
-    res.json(books);
+// Поиск книг
+router.get('/search', checkRole(['admin', 'librarian']), async (req, res) => {
+    try {
+        const books = await Book.search(req.query.q);
+        res.json(books);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 });
 
 // Добавление книги (только админ)
-router.post('/', checkRole('admin'), async (req, res) => {
-    const newBook = await Book.add(req.body);
-    res.status(201).json(newBook);
+router.post('/', checkRole(['admin']), async (req, res) => {
+    try {
+        const { title, author, year, quantity, genre } = req.body;
+        const book = await Book.add(title, author, year, quantity, genre);
+        const { error } = validateBook(req.body);
+        if (error) return res.status(400).json({ message: error.details[0].message });
+        res.status(201).json(book);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
 });
 
-// Экспортируем роутер
+// Обновление книги (только админ)
+router.put('/:id', checkRole(['admin']), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { title, author, year, quantity } = req.body;
+
+        if (!await Book.exists(id)) {
+            return res.status(404).json({ message: 'Книга не найдена' });
+        }
+        const { error } = validateBook(req.body);
+        if (error) return res.status(400).json({ message: error.details[0].message });
+        const book = await Book.update(id, title, author, year, quantity);
+        res.json(book);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+});
+
+// Удаление книги (только админ)
+router.delete('/:id', checkRole(['admin']), async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        if (!await Book.exists(id)) {
+            return res.status(404).json({ message: 'Книга не найдена' });
+        }
+
+        const deletedBook = await Book.delete(id);
+        res.json({ message: 'Книга удалена', book: deletedBook });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
 module.exports = router;

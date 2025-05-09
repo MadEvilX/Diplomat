@@ -3,27 +3,61 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Админ-панель</title>
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body>
-    <div class="sidebar">
-        <a href="/admin/dashboard.html" class="active">Главная</a>
-        <a href="/admin/books.html">Книги</a>
-        <a href="/admin/users.html">Пользователи</a>
-        <button id="logout">Выйти</button>
-    </div>
-
-    <div class="content">
-        <h1>Статистика</h1>
-        <div class="stats">
-            <div class="stat-card" id="total-books"></div>
-            <div class="stat-card" id="total-users"></div>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/school-logo.svg" alt="Логотип школы" height="40">
+                <h1>Администратор библиотеки</h1>
+            </div>
+            <nav class="admin-nav">
+                <a href="/admin/dashboard.html" class="active">Главная</a>
+                <a href="/admin/books.html">Книги</a>
+                <a href="/admin/users.html">Пользователи</a>
+                <button class="logout-btn" id="logout-btn">Выйти</button>
+            </nav>
         </div>
-    </div>
+    </header>
 
-    <script src="/public/js/app.js"></script>
+    <main class="container">
+        <section class="stats-section">
+            <h2 class="section-title">Статистика</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-books">0</div>
+                    <div class="stat-label">Всего книг</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="available-books">0</div>
+                    <div class="stat-label">Доступно</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-users">0</div>
+                    <div class="stat-label">Пользователей</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="active-loans">0</div>
+                    <div class="stat-label">Выдано книг</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-activity">
+            <h2 class="section-title">Последние действия</h2>
+            <div class="activity-list" id="activity-list">
+                <!-- Активность будет загружена через JS -->
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/admin-dashboard.js"></script>
 </body>
 
 </html>
