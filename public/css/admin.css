@@ -1,23 +1,17 @@
 /* Общие стили для админ-панели */
-.admin-nav,
-.librarian-nav {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
 
 .admin-nav a,
 .librarian-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 8px 12px;
+    color: rgb(0, 38, 255) !important;
+    background-color: transparent;
+    padding: 8px 16px;
     border-radius: 4px;
     transition: background-color 0.3s;
 }
 
 .admin-nav a.active,
 .librarian-nav a.active {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .logout-btn {
@@ -54,19 +48,26 @@
 }
 
 /* Кнопки */
-.btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.btn-primary,
+#add-book-btn,
+#book-search-btn {
+    background-color: #3f51b5 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    opacity: 1 !important;
+    transition: background-color 0.3s !important;
 }
 
-.btn-primary:hover {
-    background-color: #303f9f;
+.btn-primary:hover,
+#add-book-btn:hover,
+#book-search-btn:hover {
+    background-color: #303f9f !important;
 }
+
 
 .btn-secondary {
     background-color: #f5f5f5;
@@ -102,6 +103,16 @@
     border-radius: 8px;
     width: 100%;
     max-width: 500px;
+}
+
+.modal-content button[type="submit"] {
+    background-color: #3f51b5 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
 }
 
 .form-group {
@@ -282,4 +293,29 @@
 #page-info {
     font-size: 1.1rem;
     color: #333;
+}
+
+/* Явные стили для кнопок в таблице */
+#books-table .edit-btn,
+#books-table .delete-btn {
+    display: inline-block !important;
+    min-width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+#books-table .edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#books-table .delete-btn {
+    background-color: #f44336;
+    color: white;
 }

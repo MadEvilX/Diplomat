@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <title>Управление студентами | Школьная библиотека</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Логотип школы" height="40">
+                <h1>Управление студентами</h1>
+            </div>
+            <nav class="admin-nav">
+                <a href="/admin/dashboard.html">Главная</a>
+                <a href="/admin/books.html">Книги</a>
+                <a href="/admin/students.html">Студенты</a>
+                <a href="/admin/users.html" class="active">Пользователи</a>
+                <button class="logout-btn" id="logout-btn">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="admin-toolbar">
+            <button class="btn-primary" id="add-student-btn">Добавить студента</button>
+            <div class="search-box">
+                <input type="text" id="student-search" placeholder="Поиск студентов...">
+                <button id="student-search-btn">Найти</button>
+            </div>
+        </div>
+
+        <div class="admin-table-container">
+            <table class="admin-table" id="students-table">
+                <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        <th>Группа</th>
+                        <th>Email</th>
+                        <th>Книг на руках</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Студенты будут загружены через JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prev-page" disabled>Назад</button>
+            <span id="page-info">Страница 1</span>
+            <button id="next-page">Вперёд</button>
+        </div>
+    </main>
+
+    <!-- Модальное окно для добавления/редактирования студента -->
+    <div class="modal" id="student-modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Добавить студента</h2>
+            <form id="student-form">
+                <input type="hidden" id="student-id">
+                <div class="form-group">
+                    <label for="student-first-name">Имя</label>
+                    <input type="text" id="student-first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-last-name">Фамилия</label>
+                    <input type="text" id="student-last-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-group">Группа</label>
+                    <input type="text" id="student-group" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-email">Email</label>
+                    <input type="email" id="student-email" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn-primary">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для выдачи книги -->
+    <div class="modal" id="issue-book-modal">
+        <div class="modal-content">
+            <h2>Выдать книгу</h2>
+            <form id="issue-book-form">
+                <input type="hidden" id="issue-student-id">
+                <div class="form-group">
+                    <label for="book-select">Выберите книгу</label>
+                    <select id="book-select" required>
+                        <!-- Книги будут загружены через JS -->
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancel-issue-btn">Отмена</button>
+                    <button type="submit" class="btn-primary">Выдать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/admin-students.js"></script>
+</body>
+
+</html>

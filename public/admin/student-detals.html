@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о студенте | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+    <header class="header">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Пользователи | Школьная библиотека</title>
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="/css/admin.css">
+        <title>Управление студентами | Школьная библиотека</title>
+    </header>
+
+    <main class="container">
+        <div class="student-info">
+            <h2 id="student-name"></h2>
+            <p><strong>Группа:</strong> <span id="student-group"></span></p>
+            <p><strong>Email:</strong> <span id="student-email"></span></p>
+        </div>
+
+        <h3>Выданные книги</h3>
+        <table class="admin-table" id="loans-table">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Автор</th>
+                    <th>Дата выдачи</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Книги будут загружены через JS -->
+            </tbody>
+        </table>
+
+        <button class="btn-primary" id="back-btn">Назад к списку</button>
+    </main>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/student-details.js"></script>
+</body>
+
+</html>

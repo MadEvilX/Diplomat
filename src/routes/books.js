@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models/book');
-const { checkRole } = require('../middleware/roleMiddleware');
+const roleMiddleware = require('../middleware/roleMiddleware');
 const authMiddleware = require('../middleware/auth');
 const { validateBook } = require('../validators/bookValidator');
 
@@ -9,17 +9,17 @@ const { validateBook } = require('../validators/bookValidator');
 router.use(authMiddleware);
 
 // Получение всех книг (для админов и библиотекарей)
-router.get('/', checkRole(['admin', 'librarian']), async (req, res) => {
+router.get('/', authMiddleware, roleMiddleware(['admin', 'librarian']), async (req, res) => {
     try {
         const books = await Book.getAll();
         res.json(books);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 
 // Поиск книг
-router.get('/search', checkRole(['admin', 'librarian']), async (req, res) => {
+router.get('/search', roleMiddleware(['admin', 'librarian']), async (req, res) => {
     try {
         const books = await Book.search(req.query.q);
         res.json(books);
@@ -29,49 +29,53 @@ router.get('/search', checkRole(['admin', 'librarian']), async (req, res) => {
 });
 
 // Добавление книги (только админ)
-router.post('/', checkRole(['admin']), async (req, res) => {
+// Добавление книги (только админ)
+router.post('/', roleMiddleware(['admin']), async (req, res) => {
     try {
-        const { title, author, year, quantity, genre } = req.body;
-        const book = await Book.add(title, author, year, quantity, genre);
+        // Сначала валидация
         const { error } = validateBook(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message });
+
+        // Затем извлечение данных
+        const { title, author, year, quantity, genre } = req.body;
+
+        // Проверка обязательных полей
+        if (!genre) {
+            return res.status(400).json({ message: 'Поле "genre" обязательно для заполнения' });
+        }
+
+        // И только потом сохранение
+        const book = await Book.add(title, author, year, quantity, genre);
         res.status(201).json(book);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-// Обновление книги (только админ)
-router.put('/:id', checkRole(['admin']), async (req, res) => {
+// Удаление книги
+router.delete('/:id', authMiddleware, roleMiddleware(['admin']), async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, author, year, quantity } = req.body;
-
-        if (!await Book.exists(id)) {
-            return res.status(404).json({ message: 'Книга не найдена' });
-        }
-        const { error } = validateBook(req.body);
-        if (error) return res.status(400).json({ message: error.details[0].message });
-        const book = await Book.update(id, title, author, year, quantity);
-        res.json(book);
+        await Book.delete(id);
+        res.json({ success: true, message: 'Книга удалена' });
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
-// Удаление книги (только админ)
-router.delete('/:id', checkRole(['admin']), async (req, res) => {
+// Редактирование книги
+router.put('/:id', roleMiddleware(['admin']), async (req, res) => {
     try {
         const { id } = req.params;
+        const { error } = validateBook(req.body);
+        if (error) return res.status(400).json({ message: error.details[0].message });
 
-        if (!await Book.exists(id)) {
-            return res.status(404).json({ message: 'Книга не найдена' });
-        }
+        const { title, author, year, quantity, genre } = req.body;
+        const updatedBook = await Book.update(id, title, author, year, quantity, genre);
 
-        const deletedBook = await Book.delete(id);
-        res.json({ message: 'Книга удалена', book: deletedBook });
+        res.json(updatedBook);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(400).json({ message: err.message });
     }
 });
 

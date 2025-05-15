@@ -12,13 +12,17 @@ class Book {
     }
 
     // Статический метод для добавления новой книги
-    static async add(title, author, year, genre) {
-        // Выполняем SQL-запрос для добавления новой книги
+    static async add(title, author, year, quantity, genre) {
+        // Последняя проверка перед записью в БД
+        if (year > new Date().getFullYear()) {
+            throw new Error(`Год издания не может быть больше ${new Date().getFullYear()}`);
+        }
+
         const { rows } = await pool.query(
-            'INSERT INTO books (title, author, year, genre) VALUES ($1, $2, $3, $4) RETURNING *',
-            [title, author, year, genre]
+            'INSERT INTO books (title, author, year, quantity, genre) ' +
+            'VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [title, author, year, quantity, genre]
         );
-        // Возвращаем добавленную книгу
         return rows[0];
     }
 
@@ -27,9 +31,9 @@ class Book {
             'DELETE FROM books WHERE id = $1 RETURNING *',
             [id]
         );
-
         return rows[0];
     }
+
     // Статический метод для получения книги по её ID
     static async getById(id) {
         // Выполняем SQL-запрос для получения книги с указанным ID
@@ -41,12 +45,12 @@ class Book {
         return rows[0];
     }
     // Обновление книги
-    static async update(id, title, author, year, quantity) {
+    static async update(id, title, author, year, quantity, genre = null) {
         const { rows } = await pool.query(
             `UPDATE books 
-             SET title = $1, author = $2, year = $3, quantity = $4 
-             WHERE id = $5 RETURNING *`,
-            [title, author, year, quantity, id]
+         SET title = $1, author = $2, year = $3, quantity = $4, genre = $5
+         WHERE id = $6 RETURNING *`,
+            [title, author, year, quantity, genre, id]
         );
         return rows[0];
     }
@@ -64,12 +68,28 @@ class Book {
     static async search(query) {
         const { rows } = await pool.query(
             `SELECT * FROM books 
-             WHERE title ILIKE $1 OR author ILIKE $1`,
-            [`%${query}%`]
+             WHERE title ILIKE $1 OR author ILIKE $1 OR genre ILIKE $1`,
+            [`% ${query} % `]
         );
         return rows;
     }
 
+    // Проверка доступности книги
+    static async isAvailable(bookId) {
+        const { rows } = await pool.query(
+            'SELECT quantity FROM books WHERE id = $1',
+            [bookId]
+        );
+        return rows[0]?.quantity > 0;
+    }
+
+    // Получение книг доступных для выдачи
+    static async getAvailableBooks() {
+        const { rows } = await pool.query(
+            'SELECT id, title, author FROM books WHERE quantity > 0'
+        );
+        return rows;
+    }
 }
 
 

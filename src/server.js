@@ -112,61 +112,6 @@ app.get('/api/books/public', async (req, res) => {
     }
 });
 
-// Маршруты для книг
-const booksRouter = express.Router();
-
-// Получение списка книг (доступно всем авторизованным пользователям)
-booksRouter.get('/', authenticateToken, async (req, res) => {
-    try {
-        // Логика получения книг с пагинацией
-        const { page = 1, limit = 10 } = req.query;
-        const offset = (page - 1) * limit;
-
-        const result = await pool.query(
-            `SELECT id, title, author, year, quantity 
-       FROM books 
-       ORDER BY title
-       LIMIT $1 OFFSET $2`,
-            [limit, offset]
-        );
-
-        const countResult = await pool.query('SELECT COUNT(*) FROM books');
-        const total = parseInt(countResult.rows[0].count);
-
-        res.json({
-            books: result.rows,
-            pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
-                total,
-                pages: Math.ceil(total / limit)
-            }
-        });
-    } catch (err) {
-        console.error('Ошибка получения книг:', err);
-        res.status(500).json({ message: 'Ошибка сервера' });
-    }
-});
-
-// Добавление новой книги (только для администраторов)
-booksRouter.post('/', authenticateToken, authorizeRoles('admin'), async (req, res) => {
-    try {
-        const { title, author, year, quantity } = req.body;
-
-        const result = await pool.query(`
-            INSERT INTO books (title, author, year, quantity, genre)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id, title, author, year, quantity, genre
-          `, [title, author, year, quantity, req.body.genre || 'Не указан']);
-
-        res.status(201).json(result.rows[0]);
-
-    } catch (err) {
-        console.error('Ошибка добавления книги:', err);
-        res.status(500).json({ message: 'Ошибка сервера' });
-    }
-});
-
 // Маршруты для администратора
 const adminRouter = express.Router();
 
@@ -232,9 +177,28 @@ app.get('/api/admin/stats', authenticateToken, authorizeRoles('admin'), async (r
 });
 
 // Подключение маршрутов
+const booksRouter = require('./routes/books');
 app.use('/auth', authRouter);
 app.use('/api/books', booksRouter);
-app.use('/admin', adminRouter);
+const studentsRouter = require('./routes/students');
+app.use('/api/students', studentsRouter);
+const loansRouter = require('./routes/loans');
+app.use('/api/loans', loansRouter);
+
+app.get('/api/books/public', async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT id, title, author, year, genre, quantity 
+            FROM books 
+            WHERE quantity > 0
+            ORDER BY title
+        `);
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Ошибка получения книг:', err);
+        res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
 
 // Обработка 404
 app.use((req, res) => {

@@ -10,10 +10,11 @@ const validateBook = (bookData) => {
   }
 
   const currentYear = new Date().getFullYear();
-  if (!bookData.year || bookData.year < 1800 || bookData.year > currentYear) {
-    errors.push(`Год издания должен быть между 1800 и ${currentYear}`);
+  if (year && (year < 1800 || year > currentYear + 5)) { // +5 лет в будущее
+    return res.status(400).json({
+      message: `Год должен быть между 1800 и ${currentYear + 5}`
+    });
   }
-
   if (!bookData.quantity || bookData.quantity < 0) {
     errors.push('Количество книг не может быть отрицательным');
   }

@@ -1,28 +1,26 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware для проверки JWT-токена
-const authMiddleware = (req, res, next) => {
-    // Извлекаем токен из заголовка Authorization
+module.exports = (req, res, next) => {
+    // 1. Получаем токен из заголовка
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
-    // Если токен отсутствует, возвращаем ошибку
+    // 2. Проверка наличия токена
     if (!token) {
-        return res.status(401).json({ message: 'Доступ запрещен. Токен отсутствует.' });
+        return res.status(401).json({ message: 'Токен отсутствует' });
     }
 
+    // 3. Верификация токена
     try {
-        // Проверяем токен
-        const decoded = jwt.verify(
-            token,
-            process.env.JWT_SECRET // И здесь!
-        );
-        // Добавляем информацию о пользователе в объект запроса
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log('Успешная верификация токена для пользователя:', {
+            id: decoded.id,
+            email: decoded.email,
+            role: decoded.role
+        });
         req.user = decoded;
         next();
     } catch (err) {
-        // Если токен недействителен, возвращаем ошибку
-        res.status(400).json({ message: 'Недействительный токен.' });
+        console.error('Ошибка верификации токена:', err.message);
+        return res.status(401).json({ message: 'Недействительный токен' });
     }
 };
-
-module.exports = authMiddleware;
