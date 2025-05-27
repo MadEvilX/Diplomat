@@ -77,17 +77,20 @@ class Book {
     // Проверка доступности книги
     static async isAvailable(bookId) {
         const { rows } = await pool.query(
-            'SELECT quantity FROM books WHERE id = $1',
+            'SELECT quantity FROM books WHERE id = $1 FOR UPDATE',
             [bookId]
         );
-        return rows[0]?.quantity > 0;
+        return rows.length > 0 && rows[0].quantity > 0;
     }
 
-    // Получение книг доступных для выдачи
-    static async getAvailableBooks() {
-        const { rows } = await pool.query(
-            'SELECT id, title, author FROM books WHERE quantity > 0'
-        );
+    // Получение доступных для выдачи книг
+    static async getAvailable() {
+        const { rows } = await pool.query(`
+        SELECT id, title, author 
+        FROM books 
+        WHERE quantity > 0
+        ORDER BY title
+    `);
         return rows;
     }
 }

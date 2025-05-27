@@ -34,6 +34,11 @@ router.post('/', authMiddleware, roleMiddleware(['admin', 'librarian']), async (
 // Получение информации о студенте
 router.get('/:id', authMiddleware, roleMiddleware(['admin', 'librarian']), async (req, res) => {
     try {
+        // Валидация ID
+        if (isNaN(req.params.id)) {
+            return res.status(400).json({ message: 'ID студента должен быть числом' });
+        }
+
         const student = await Student.getById(req.params.id);
         if (!student) {
             return res.status(404).json({ message: 'Студент не найден' });
@@ -53,7 +58,7 @@ router.delete('/:id', authMiddleware, roleMiddleware(['admin']), async (req, res
         res.status(500).json({ message: err.message });
     }
 });
-
+// Обновление студента
 router.put('/:id', authMiddleware, roleMiddleware(['admin', 'librarian']), async (req, res) => {
     try {
         const { firstName, lastName, groupName, email } = req.body;
@@ -74,5 +79,15 @@ router.put('/:id', authMiddleware, roleMiddleware(['admin', 'librarian']), async
         res.status(400).json({ message: err.message });
     }
 });
+
+router.get('/:id/books', authMiddleware, roleMiddleware(['admin', 'librarian']), async (req, res) => {
+    try {
+        const books = await Student.getBooks(req.params.id);
+        res.json(books);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 module.exports = router;

@@ -30,7 +30,7 @@ class Student {
     static async getById(id) {
         const { rows } = await pool.query(
             'SELECT * FROM students WHERE id = $1',
-            [id]
+            [parseInt(id)]
         );
         return rows[0];
     }
@@ -77,6 +77,14 @@ class Student {
         ORDER BY bl.status DESC, bl.loan_date DESC
     `, [studentId]);
         return rows;
+    }
+
+    static async exists(id) {
+        const { rows } = await pool.query(
+            'SELECT EXISTS(SELECT 1 FROM students WHERE id = $1)',
+            [id]
+        );
+        return rows[0].exists;
     }
 }
 

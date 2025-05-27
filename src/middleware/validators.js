@@ -15,6 +15,7 @@ const validateBook = (bookData) => {
       message: `Год должен быть между 1800 и ${currentYear + 5}`
     });
   }
+
   if (!bookData.quantity || bookData.quantity < 0) {
     errors.push('Количество книг не может быть отрицательным');
   }

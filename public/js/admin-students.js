@@ -154,6 +154,91 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Добавим обработчик для кнопки "Выдать книгу"
+    document.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('issue-btn')) {
+            const studentId = e.target.dataset.id;
+            // Здесь можно открыть модальное окно для выбора книги
+            openIssueBookModal(studentId);
+        }
+    });
+
+    // Функция для открытия модального окна выдачи книги
+    async function openIssueBookModal(studentId) {
+        try {
+            // Загружаем доступные книги
+            const response = await fetch('/api/books/available', {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки доступных книг');
+            }
+
+            const books = await response.json();
+
+            // Заполняем выпадающий список
+            const bookSelect = document.getElementById('book-select');
+            bookSelect.innerHTML = books.map(book =>
+                `<option value="${book.id}">${book.title} (${book.author})</option>`
+            ).join('');
+
+            // Устанавливаем ID студента
+            document.getElementById('issue-student-id').value = studentId;
+
+            // Показываем модальное окно
+            document.getElementById('issue-book-modal').style.display = 'flex';
+        } catch (err) {
+            console.error('Ошибка:', err);
+            alert(`Ошибка: ${err.message}`);
+        }
+    }
+
+    // Обработчик формы выдачи книги
+    document.getElementById('issue-book-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const dueDateInput = document.getElementById('due-date');
+        const dueDate = dueDateInput.value;
+
+        // Проверка значения даты
+        if (!dueDate) {
+            alert('Выберите дату возврата!');
+            dueDateInput.focus();
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/loans', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    bookId: parseInt(document.getElementById('book-select').value),
+                    studentId: parseInt(document.getElementById('issue-student-id').value),
+                    dueDate: dueDate // Отправляем как есть, без преобразований
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message);
+            }
+
+            alert('Книга успешно выдана!');
+            document.getElementById('issue-book-modal').style.display = 'none';
+        } catch (err) {
+            console.error('Error:', err);
+            alert(`Ошибка: ${err.message}`);
+        }
+    });
+
+    document.getElementById('cancel-issue-btn').addEventListener('click', () => {
+        document.getElementById('issue-book-modal').style.display = 'none';
+    });
+
     // Поиск студентов
     searchBtn.addEventListener('click', () => {
         const searchTerm = searchInput.value.toLowerCase();

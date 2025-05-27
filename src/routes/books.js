@@ -29,7 +29,6 @@ router.get('/search', roleMiddleware(['admin', 'librarian']), async (req, res) =
 });
 
 // Добавление книги (только админ)
-// Добавление книги (только админ)
 router.post('/', roleMiddleware(['admin']), async (req, res) => {
     try {
         // Сначала валидация
@@ -58,6 +57,16 @@ router.delete('/:id', authMiddleware, roleMiddleware(['admin']), async (req, res
         const { id } = req.params;
         await Book.delete(id);
         res.json({ success: true, message: 'Книга удалена' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Получение доступных книг
+router.get('/available', authMiddleware, roleMiddleware(['admin', 'librarian']), async (req, res) => {
+    try {
+        const books = await Book.getAvailable();
+        res.json(books);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

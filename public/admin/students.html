@@ -21,7 +21,7 @@
                 <a href="/admin/dashboard.html">Главная</a>
                 <a href="/admin/books.html">Книги</a>
                 <a href="/admin/students.html">Студенты</a>
-                <a href="/admin/users.html" class="active">Пользователи</a>
+                <a href="/admin/student-detals.html">Возврат книги</a>
                 <button class="logout-btn" id="logout-btn">Выйти</button>
             </nav>
         </div>
@@ -101,6 +101,10 @@
                     <select id="book-select" required>
                         <!-- Книги будут загружены через JS -->
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="due-date">Срок возврата</label>
+                    <input type="date" id="due-date" required>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" id="cancel-issue-btn">Отмена</button>

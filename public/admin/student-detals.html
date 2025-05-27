@@ -10,28 +10,44 @@
 
 <body>
     <header class="header">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Пользователи | Школьная библиотека</title>
-        <link rel="stylesheet" href="/css/styles.css">
-        <link rel="stylesheet" href="/css/admin.css">
-        <title>Управление студентами | Школьная библиотека</title>
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Логотип школы" height="40">
+                <h1>Информация о студенте</h1>
+            </div>
+            <nav class="admin-nav">
+                <a href="/admin/dashboard.html">Главная</a>
+                <a href="/admin/books.html">Книги</a>
+                <a href="/admin/students.html">Студенты</a>
+                <a href="/admin/student-detals.html">Возврат книги</a>
+                <button class="logout-btn" id="logout-btn">Выйти</button>
+            </nav>
+        </div>
     </header>
 
     <main class="container">
+        <div class="admin-toolbar">
+            <div class="search-box">
+                <input type="text" id="student-search" placeholder="Поиск студента по ID...">
+                <button class="btn-primary" id="search-student-btn">Найти</button>
+            </div>
+        </div>
+
         <div class="student-info">
             <h2 id="student-name"></h2>
             <p><strong>Группа:</strong> <span id="student-group"></span></p>
             <p><strong>Email:</strong> <span id="student-email"></span></p>
         </div>
 
-        <h3>Выданные книги</h3>
+        <h3>История выдачи книг</h3>
         <table class="admin-table" id="loans-table">
             <thead>
                 <tr>
                     <th>Название</th>
                     <th>Автор</th>
                     <th>Дата выдачи</th>
+                    <th>Срок возврата</th>
+                    <th>Дата возврата</th>
                     <th>Статус</th>
                     <th>Действия</th>
                 </tr>
@@ -45,7 +61,7 @@
     </main>
 
     <script src="/js/auth-check.js"></script>
-    <script src="/js/student-details.js"></script>
+    <script src="/js/admin-student-detals.js"></script>
 </body>
 
 </html>
