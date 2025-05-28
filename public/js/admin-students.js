@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Элементы
-    const studentsTable = document.getElementById('students-table').querySelector('tbody');
+    const studentsTable = document.getElementById('students-table')?.querySelector('tbody');
     const addStudentBtn = document.getElementById('add-student-btn');
     const studentModal = document.getElementById('student-modal');
     const studentForm = document.getElementById('student-form');
@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchBtn = document.getElementById('student-search-btn');
     const cancelBtn = document.getElementById('cancel-btn');
     const logoutBtn = document.getElementById('logout-btn');
+
+    // Добавьте проверку
+    if (!studentsTable || !addStudentBtn || !studentModal || !studentForm ||
+        !searchInput || !searchBtn || !cancelBtn || !logoutBtn) {
+        console.error('Не найдены необходимые элементы DOM');
+        return;
+    }
 
     let allStudents = [];
 
@@ -34,18 +41,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Отображение студентов
     function renderStudents(students = allStudents) {
         studentsTable.innerHTML = students.map(student => `
-            <tr>
-                <td>${student.last_name} ${student.first_name}</td>
-                <td>${student.group_name}</td>
-                <td>${student.email}</td>
-                <td>${student.active_loans || 0}</td>
-                <td>
-                    <button class="btn-primary issue-btn" data-id="${student.id}">Выдать книгу</button>
-                    <button class="btn-edit edit-btn" data-id="${student.id}">✏️</button>
-                    <button class="btn-delete delete-btn" data-id="${student.id}">🗑️</button>
-                </td>
-            </tr>
-        `).join('');
+        <tr>
+            <td>${student.id}</td>
+            <td>${student.last_name} ${student.first_name}</td>
+            <td>${student.group_name}</td>
+            <td>${student.email}</td>
+            <td>${student.active_loans || 0}</td>
+            <td>
+                <button class="btn btn-primary issue-btn" data-id="${student.id}">Выдать книгу</button>
+                <button class="btn btn-warning edit-btn" data-id="${student.id}">✏️</button>
+                <button class="btn btn-danger delete-btn" data-id="${student.id}">🗑️</button>
+            </td>
+        </tr>
+    `).join('');
 
         // Назначение обработчиков
         document.querySelectorAll('.edit-btn').forEach(btn => {

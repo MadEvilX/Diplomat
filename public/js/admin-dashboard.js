@@ -1,19 +1,84 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // Проверка авторизации и роли
-    if (!checkAuth() || JSON.parse(localStorage.getItem('user')).role !== 'admin') {
+    // Проверка авторизации
+    if (!checkAuth() || !['admin', 'librarian'].includes(JSON.parse(localStorage.getItem('user')).role)) {
         window.location.href = '/login.html';
         return;
     }
 
     // Элементы
-    const statElements = {
-        books: document.getElementById('total-books'),
-        available: document.getElementById('available-books'),
-        users: document.getElementById('total-users'),
-        loans: document.getElementById('active-loans')
-    };
+    const totalBooksEl = document.getElementById('total-books');
+    const availableBooksEl = document.getElementById('available-books');
+    const totalStudentsEl = document.getElementById('total-users');
+    const activeLoansEl = document.getElementById('active-loans');
     const activityList = document.getElementById('activity-list');
     const logoutBtn = document.getElementById('logout-btn');
+
+    // Загрузка статистики
+    async function loadStats() {
+        try {
+            // Загружаем данные параллельно
+            const [booksRes, studentsRes, loansRes] = await Promise.all([
+                fetch('/api/books', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                }),
+                fetch('/api/students', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                }),
+                fetch('/api/loans', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                })
+            ]);
+
+            const books = await booksRes.json();
+            const students = await studentsRes.json();
+            const loans = await loansRes.json();
+
+            // Обновляем статистику
+            totalBooksEl.textContent = books.length;
+            availableBooksEl.textContent = books.reduce((sum, book) => sum + book.quantity, 0);
+            totalStudentsEl.textContent = students.length;
+            activeLoansEl.textContent = loans.filter(loan => loan.status === 'issued').length;
+
+            // Загружаем последние выдачи книг
+            loadRecentActivity(loans);
+        } catch (err) {
+            console.error('Ошибка загрузки статистики:', err);
+        }
+    }
+
+    // Загрузка последних выдач книг
+    async function loadRecentActivity(loans) {
+        try {
+            // Фильтруем только последние 5 выдач
+            const recentLoans = loans
+                .sort((a, b) => new Date(b.loan_date) - new Date(a.loan_date))
+                .slice(0, 5);
+
+            activityList.innerHTML = recentLoans.map(loan => `
+                <div class="activity-item">
+                    <div class="activity-icon">📖</div>
+                    <div class="activity-details">
+                        <div class="activity-title">${loan.book_title || 'Неизвестная книга'}</div>
+                        <div class="activity-meta">
+                            ${loan.first_name || ''} ${loan.last_name || ''} (${loan.group_name || ''}) • 
+                            Выдано: ${formatDate(loan.loan_date)} → Вернуть: ${formatDate(loan.due_date)}
+                            ${loan.status === 'overdue' ? ' ⚠️ Просрочено' : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (err) {
+            console.error('Ошибка загрузки активности:', err);
+            activityList.innerHTML = '<div class="error">Ошибка загрузки последних выдач</div>';
+        }
+    }
+
+    // Форматирование даты
+    function formatDate(dateString) {
+        if (!dateString) return '—';
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('ru-RU', options);
+    }
 
     // Навигация по клику на карточки
     function setupCardNavigation() {
@@ -22,69 +87,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         document.getElementById('total-users').closest('.stat-card').addEventListener('click', () => {
-            window.location.href = '/admin/users.html';
+            window.location.href = '/admin/students.html';
         });
-    }
 
-    // Загрузка данных
-    async function loadDashboardData() {
-        try {
-            const response = await fetch('/api/admin/stats', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            const data = await response.json();
-
-            // Заполняем статистику
-            statElements.books.textContent = data.totalBooks;
-            statElements.available.textContent = data.availableBooks;
-            statElements.users.textContent = data.totalUsers;
-            statElements.loans.textContent = data.activeLoans;
-
-            // Заполняем последние действия с кликабельными элементами
-            activityList.innerHTML = data.recentActivities.map(activity => `
-                <div class="activity-item" data-id="${activity.id}" data-type="${activity.type}">
-                    <div class="activity-type ${activity.type}">${getActivityTypeName(activity.type)}</div>
-                    <div class="activity-details">${activity.description}</div>
-                    <div class="activity-time">${new Date(activity.timestamp).toLocaleString()}</div>
-                </div>
-            `).join('');
-
-            // Добавляем обработчики для действий
-            document.querySelectorAll('.activity-item').forEach(item => {
-                item.addEventListener('click', () => handleActivityClick(item.dataset));
-            });
-
-        } catch (err) {
-            console.error('Ошибка загрузки данных:', err);
-            alert('Не удалось загрузить данные dashboard');
-        }
-    }
-
-    // Обработка клика на активность
-    function handleActivityClick({ id, type }) {
-        switch (type) {
-            case 'book':
-                window.location.href = `/admin/books.html?highlight=${id}`;
-                break;
-            case 'user':
-                window.location.href = `/admin/users.html?highlight=${id}`;
-                break;
-            case 'loan':
-                window.location.href = `/admin/loans.html?highlight=${id}`;
-                break;
-        }
-    }
-
-    // Преобразование типа активности
-    function getActivityTypeName(type) {
-        const types = {
-            'book': 'Книга',
-            'user': 'Пользователь',
-            'loan': 'Выдача'
-        };
-        return types[type] || type;
+        document.getElementById('active-loans').closest('.stat-card').addEventListener('click', () => {
+            window.location.href = '/admin/student-detals.html';
+        });
     }
 
     // Выход из системы
@@ -96,5 +104,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Инициализация
     setupCardNavigation();
-    loadDashboardData();
+    loadStats();
 });

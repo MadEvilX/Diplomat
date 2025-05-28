@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация о студенте | Школьная библиотека</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/librarian.css">
+    <link rel="icon" href="/assets/logo.ico" type="image/x-icon">
+</head>
+
+<body>
+    <header class="librarian-header">
+        <div class="container">
+            <div class="logo">
+                <img src="/assets/logo.png" alt="Логотип школы" height="40">
+                <h1>Информация о студенте</h1>
+            </div>
+            <nav class="librarian-nav">
+                <a href="/librarian/books.html">Книги</a>
+                <a href="/librarian/students.html">Студенты</a>
+                <button class="librarian-logout-btn" id="logout-btn">Выйти</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="librarian-card">
+            <div class="librarian-search-panel">
+                <div class="librarian-search-box">
+                    <input type="text" id="student-search" placeholder="Поиск студента по ID...">
+                    <button class="librarian-search-btn" id="search-student-btn">Найти</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="librarian-card librarian-student-info">
+            <h2 class="librarian-student-name" id="student-name">-</h2>
+            <div class="librarian-student-meta">
+                <div><span>Группа:</span> <span id="student-group">-</span></div>
+                <div><span>Email:</span> <span id="student-email">-</span></div>
+                <div><span>Книг на руках:</span> <span id="student-active-loans">0</span></div>
+            </div>
+        </div>
+
+        <div class="librarian-card">
+            <h3>История выдачи книг</h3>
+            <div class="librarian-table-container">
+                <table class="librarian-data-table" id="loans-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Автор</th>
+                            <th>Дата выдачи</th>
+                            <th>Срок возврата</th>
+                            <th>Дата возврата</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Данные будут загружены через JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="/librarian/students.html" class="librarian-btn librarian-btn-secondary" id="back-btn">Назад к
+                списку студентов</a>
+        </div>
+    </main>
+
+    <script src="/js/auth-check.js"></script>
+    <script src="/js/librarian-student-details.js"></script>
+</body>
+
+</html>

@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Управление книгами | Школьная библиотека</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
+    <link rel="icon" href="/assets/logo.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -22,29 +22,29 @@
                 <a href="/admin/books.html" class="active">Книги</a>
                 <a href="/admin/students.html">Студенты</a>
                 <a href="/admin/student-detals.html">Возврат книги</a>
-                <button class="logout-btn" id="logout-btn">Выйти</button>
+                <button class="logout-btn btn btn-danger" id="logout-btn">Выйти</button>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <div class="admin-toolbar">
-            <button class="btn-primary" id="add-book-btn">Добавить книгу</button>
+        <div class="search-panel">
+            <button class="btn btn-primary" id="add-book-btn">Добавить книгу</button>
             <div class="search-box">
-                <input type="text" id="book-search" placeholder="Поиск книг...">
-                <button id="book-search-btn">Найти</button>
+                <input type="text" id="book-search" class="form-control" placeholder="Поиск книг...">
+                <button class="btn btn-primary" id="book-search-btn">Найти</button>
             </div>
         </div>
 
-        <div class="admin-table-container">
-            <table class="admin-table" id="books-table">
+        <div class="table-container">
+            <table class="data-table" id="books-table">
                 <thead>
                     <tr>
                         <th>Название</th>
                         <th>Автор</th>
                         <th>Год</th>
                         <th>Жанр</th>
-                        <th>Количество</th>
+                        <th>Доступно</th>
                         <th>Действия</th>
                     </tr>
                 </thead>
@@ -55,12 +55,13 @@
         </div>
 
         <div class="pagination">
-            <button id="prev-page" disabled>Назад</button>
-            <span id="page-info">Страница 1</span>
-            <button id="next-page">Вперёд</button>
+            <button class="btn btn-secondary" id="prev-page" disabled>Назад</button>
+            <span class="page-info" id="page-info">Страница 1</span>
+            <button class="btn btn-secondary" id="next-page">Вперёд</button>
         </div>
     </main>
 
+    <!-- Модальное окно добавления/редактирования -->
     <!-- Модальное окно добавления/редактирования -->
     <div class="modal" id="book-modal">
         <div class="modal-content">
@@ -69,27 +70,27 @@
                 <input type="hidden" id="book-id">
                 <div class="form-group">
                     <label for="book-title">Название</label>
-                    <input type="text" id="book-title" required>
+                    <input type="text" id="book-title" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="book-author">Автор</label>
-                    <input type="text" id="book-author" required>
+                    <input type="text" id="book-author" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="book-year">Год издания</label>
-                    <input type="number" id="book-year" min="1900" max="2099" required>
+                    <input type="number" id="book-year" class="form-control" min="1900" max="2099" required>
                 </div>
                 <div class="form-group">
                     <label for="book-quantity">Количество</label>
-                    <input type="number" id="book-quantity" min="1" required>
+                    <input type="number" id="book-quantity" class="form-control" min="1" required>
                 </div>
                 <div class="form-group">
                     <label for="book-genre">Жанр</label>
-                    <input type="text" id="book-genre" required>
+                    <input type="text" id="book-genre" class="form-control" required>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
-                    <button type="submit" class="btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </form>
         </div>

@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Загрузка данных студента и его книг
-    // В функции loadStudentData обновим обработку ошибок:
     async function loadStudentData(studentId) {
         console.log('Loading data for student:', studentId);
         if (!studentId) return;
@@ -108,16 +107,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (!studentRes.ok) throw new Error('Student load failed');
             const student = await studentRes.json();
-            console.log('Student data:', student);
 
-            // 2. Загрузка книг
+            // 2. Загрузка книг (теперь не будет 404 ошибки)
             const loansRes = await fetch(`/api/loans/student/${studentId}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
             });
 
-            if (!loansRes.ok) throw new Error('Books load failed');
+            // Убрали проверку loansRes.ok - так как сервер всегда возвращает 200
             const loans = await loansRes.json();
-            console.log('Loans data:', loans);
 
             // 3. Обновление UI
             updateStudentUI(student, loans);
@@ -141,6 +138,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             `${student.last_name} ${student.first_name}`;
         document.getElementById('student-group').textContent = student.group_name;
         document.getElementById('student-email').textContent = student.email;
+        const activeLoans = loans.filter(loan => loan.status === 'issued').length;
+        document.getElementById('student-active-loans').textContent = activeLoans;
 
 
         // Обновление таблицы с книгами
@@ -155,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td>${getStatusText(loan.status)}</td>
             <td>
                 ${loan.status === 'issued' ?
-                `<button class="return-btn" data-id="${loan.id}">Вернуть</button>` :
+                `<button class="btn btn-primary return-btn" data-id="${loan.id}">Вернуть</button>` :
                 ''}
             </td>
         </tr>

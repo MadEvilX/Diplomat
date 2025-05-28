@@ -8,14 +8,28 @@ class Loan {
         try {
             await client.query('BEGIN');
 
-            // Жёсткая проверка и преобразование даты
+            // 1. Проверяем доступность книги
+            const bookCheck = await client.query(
+                'SELECT quantity FROM books WHERE id = $1 FOR UPDATE',
+                [bookId]
+            );
+
+            if (bookCheck.rows.length === 0 || bookCheck.rows[0].quantity <= 0) {
+                throw new Error('Книга недоступна для выдачи');
+            }
+
+            // 2. Уменьшаем количество книг
+            await client.query(
+                'UPDATE books SET quantity = quantity - 1 WHERE id = $1',
+                [bookId]
+            );
+
+            // 3. Создаем запись о выдаче
             const dueDateObj = new Date(dueDate);
             if (isNaN(dueDateObj.getTime())) {
                 throw new Error('Invalid due date');
             }
             const pgDueDate = dueDateObj.toISOString().split('T')[0];
-
-            console.log('Final due_date to insert:', pgDueDate); // Важный лог
 
             const { rows } = await client.query(
                 `INSERT INTO book_loans 
@@ -106,7 +120,7 @@ class Loan {
             ORDER BY bl.loan_date DESC
         `, [studentId]);
 
-            return rows;
+            return rows; // Если записей нет, вернется пустой массив
         } catch (err) {
             console.error('Database query error:', err);
             throw err;

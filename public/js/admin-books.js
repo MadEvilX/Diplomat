@@ -89,9 +89,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td>${book.year}</td>
             <td>${book.genre}</td>
             <td>${book.quantity}</td>
+            
             <td>
-                <button class="edit-btn" data-id="${book.id}">✏️</button>
-                <button class="delete-btn" data-id="${book.id}">🗑️</button>
+                <button class="btn btn-warning edit-btn" data-id="${book.id}">✏️</button>
+                <button class="btn btn-danger delete-btn" data-id="${book.id}">🗑️</button>
             </td>
         </tr>
     `).join('');
@@ -178,6 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('book-author').value = book.author;
             document.getElementById('book-year').value = book.year;
             document.getElementById('book-quantity').value = book.quantity;
+            document.getElementById('book-genre').value = book.genre || '';
         } else {
             // Режим добавления
             modalTitle.textContent = 'Добавить книгу';

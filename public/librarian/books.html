@@ -6,65 +6,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог книг | Школьная библиотека</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/librarian.css">
+    <link rel="icon" href="/assets/logo.ico" type="image/x-icon">
 </head>
 
 <body>
-    <header class="header">
+    <header class="librarian-header">
         <div class="container">
             <div class="logo">
-                <img src="/assets/school-logo.svg" alt="Логотип школы" height="40">
+                <img src="/assets/logo.png" alt="Логотип школы" height="40">
                 <h1>Каталог книг</h1>
             </div>
             <nav class="librarian-nav">
                 <a href="/librarian/books.html" class="active">Книги</a>
-                <button class="logout-btn" id="logout-btn">Выйти</button>
+                <a href="/librarian/students.html">Студенты</a>
+                <button class="librarian-logout-btn" id="logout-btn">Выйти</button>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <div class="librarian-toolbar">
+        <div class="librarian-search-panel">
             <div class="search-box">
                 <input type="text" id="book-search" placeholder="Поиск книг...">
-                <button id="book-search-btn">Найти</button>
+                <button class="librarian-search-btn" id="book-search-btn">Найти</button>
             </div>
-            <button class="btn-primary" id="loan-book-btn">Выдать книгу</button>
         </div>
 
-        <div class="books-grid" id="books-list">
-            <!-- Книги будут загружены через JS -->
+        <div class="librarian-table-container">
+            <table class="librarian-data-table" id="books-table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Год</th>
+                        <th>Жанр</th>
+                        <th>Доступно</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Книги будут загружены через JS -->
+                </tbody>
+            </table>
         </div>
 
-        <div class="pagination">
-            <button id="prev-page" disabled>Назад</button>
-            <span id="page-info">Страница 1</span>
-            <button id="next-page">Вперёд</button>
+        <div class="librarian-pagination">
+            <button class="librarian-pagination-btn" id="prev-page" disabled>Назад</button>
+            <span class="page-info" id="page-info">Страница 1</span>
+            <button class="librarian-pagination-btn" id="next-page">Вперёд</button>
         </div>
     </main>
 
     <!-- Модальное окно выдачи книги -->
-    <div class="modal" id="loan-modal">
-        <div class="modal-content">
+    <div class="librarian-modal" id="loan-modal">
+        <div class="librarian-modal-content">
             <h2>Выдать книгу</h2>
             <form id="loan-form">
-                <div class="form-group">
+                <div class="librarian-form-group">
                     <label for="loan-book">Книга</label>
-                    <input type="text" id="loan-book" readonly>
+                    <input type="text" id="loan-book" class="librarian-form-control" readonly>
                 </div>
-                <div class="form-group">
-                    <label for="loan-user">Ученик/Учитель</label>
-                    <select id="loan-user" required>
-                        <!-- Пользователи будут загружены через JS -->
+                <div class="librarian-form-group">
+                    <label for="loan-user">Студент</label>
+                    <select id="loan-user" class="librarian-form-control" required>
+                        <option value="">Выберите студента...</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="librarian-form-group">
                     <label for="loan-date">Дата возврата</label>
-                    <input type="date" id="loan-date" required>
+                    <input type="date" id="loan-date" class="librarian-form-control" required>
                 </div>
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
-                    <button type="submit" class="btn-primary">Подтвердить</button>
+                <div class="librarian-form-actions">
+                    <button type="button" class="librarian-btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="librarian-btn-primary">Выдать</button>
                 </div>
             </form>
         </div>

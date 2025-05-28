@@ -61,11 +61,9 @@ router.get('/student/:id', async (req, res) => {
         console.log(`Fetching loans for student ${req.params.id}`);
         const loans = await Loan.getByStudent(req.params.id);
 
-        if (!loans || loans.length === 0) {
-            return res.status(404).json({ message: 'No books found for this student' });
-        }
+        // Всегда возвращаем успешный ответ с массивом (даже пустым)
+        res.json(loans || []); // Это ключевое изменение!
 
-        res.json(loans);
     } catch (err) {
         console.error('Error fetching loans:', err);
         res.status(500).json({
@@ -74,5 +72,4 @@ router.get('/student/:id', async (req, res) => {
         });
     }
 });
-
 module.exports = router;

@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пользователи | Школьная библиотека</title>
+    <title>Управление студентами | Школьная библиотека</title>
+    <!-- Проверьте пути к CSS -->
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/admin.css">
-    <title>Управление студентами | Школьная библиотека</title>
+    <link rel="icon" href="/assets/logo.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -20,26 +21,27 @@
             <nav class="admin-nav">
                 <a href="/admin/dashboard.html">Главная</a>
                 <a href="/admin/books.html">Книги</a>
-                <a href="/admin/students.html">Студенты</a>
+                <a href="/admin/students.html" class="active">Студенты</a>
                 <a href="/admin/student-detals.html">Возврат книги</a>
-                <button class="logout-btn" id="logout-btn">Выйти</button>
+                <button class="logout-btn btn btn-danger" id="logout-btn">Выйти</button>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <div class="admin-toolbar">
-            <button class="btn-primary" id="add-student-btn">Добавить студента</button>
+        <div class="search-panel">
+            <button class="btn btn-primary" id="add-student-btn">Добавить студента</button>
             <div class="search-box">
-                <input type="text" id="student-search" placeholder="Поиск студентов...">
-                <button id="student-search-btn">Найти</button>
+                <input type="text" id="student-search" class="form-control" placeholder="Поиск студентов...">
+                <button class="btn btn-primary" id="student-search-btn">Найти</button>
             </div>
         </div>
 
-        <div class="admin-table-container">
-            <table class="admin-table" id="students-table">
+        <div class="table-container">
+            <table class="data-table" id="students-table">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>ФИО</th>
                         <th>Группа</th>
                         <th>Email</th>
@@ -48,19 +50,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Студенты будут загружены через JS -->
+                    <!-- Данные будут загружены через JS -->
+                    <tr>
+                        <td colspan="6">Загрузка данных...</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="pagination">
-            <button id="prev-page" disabled>Назад</button>
-            <span id="page-info">Страница 1</span>
-            <button id="next-page">Вперёд</button>
+            <button class="btn btn-secondary" id="prev-page" disabled>Назад</button>
+            <span class="page-info" id="page-info">Страница 1</span>
+            <button class="btn btn-secondary" id="next-page">Вперёд</button>
         </div>
     </main>
 
-    <!-- Модальное окно для добавления/редактирования студента -->
+    <!-- Модальное окно добавления/редактирования студента -->
     <div class="modal" id="student-modal">
         <div class="modal-content">
             <h2 id="modal-title">Добавить студента</h2>
@@ -68,29 +73,28 @@
                 <input type="hidden" id="student-id">
                 <div class="form-group">
                     <label for="student-first-name">Имя</label>
-                    <input type="text" id="student-first-name" required>
+                    <input type="text" id="student-first-name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="student-last-name">Фамилия</label>
-                    <input type="text" id="student-last-name" required>
+                    <input type="text" id="student-last-name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="student-group">Группа</label>
-                    <input type="text" id="student-group" required>
+                    <input type="text" id="student-group" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="student-email">Email</label>
-                    <input type="email" id="student-email" required>
+                    <input type="email" id="student-email" class="form-control" required>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" id="cancel-btn">Отмена</button>
-                    <button type="submit" class="btn-primary">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-btn">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Модальное окно для выдачи книги -->
     <div class="modal" id="issue-book-modal">
         <div class="modal-content">
             <h2>Выдать книгу</h2>
@@ -98,17 +102,17 @@
                 <input type="hidden" id="issue-student-id">
                 <div class="form-group">
                     <label for="book-select">Выберите книгу</label>
-                    <select id="book-select" required>
-                        <!-- Книги будут загружены через JS -->
+                    <select id="book-select" class="form-control" required>
+                        <option value="">Загрузка книг...</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="due-date">Срок возврата</label>
-                    <input type="date" id="due-date" required>
+                    <input type="date" id="due-date" class="form-control" required>
                 </div>
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" id="cancel-issue-btn">Отмена</button>
-                    <button type="submit" class="btn-primary">Выдать</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-issue-btn">Отмена</button>
+                    <button type="submit" class="btn btn-primary">Выдать</button>
                 </div>
             </form>
         </div>

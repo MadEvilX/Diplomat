@@ -1,0 +1,413 @@
+/* Основные переменные */
+:root {
+    --primary-color: #4285f4;
+    --primary-hover: #3367d6;
+    --danger-color: #ea4335;
+    --secondary-color: #9e9e9e;
+    --text-color: #202124;
+    --light-text: #5f6368;
+    --border-color: #dadce0;
+    --background-color: #f8f9fa;
+    --card-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+/* Общие стили */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Шапка */
+.librarian-header {
+    background-color: white;
+    box-shadow: var(--card-shadow);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.librarian-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+}
+
+.librarian-nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.librarian-nav a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Кнопки */
+.librarian-btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.librarian-btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.librarian-btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.librarian-logout-btn {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.librarian-search-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.librarian-pagination-btn {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.librarian-pagination-btn:hover {
+    background-color: var(--background-color);
+}
+
+.librarian-pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Поиск */
+.librarian-search-panel {
+    margin-bottom: 20px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+}
+
+.search-box input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+/* Таблица */
+.librarian-table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.librarian-data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.librarian-data-table th {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.librarian-data-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.librarian-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Пагинация */
+.librarian-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-info {
+    margin: 0 10px;
+}
+
+/* Модальное окно */
+.librarian-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.librarian-modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--card-shadow);
+}
+
+.librarian-form-group {
+    margin-bottom: 16px;
+}
+
+.librarian-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.librarian-form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.librarian-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* Основные стили для всех страниц библиотекаря */
+.librarian-header {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.librarian-nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.librarian-nav a {
+    color: #3f51b5;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.librarian-nav a.active {
+    background-color: #3f51b5;
+    color: white;
+}
+
+.librarian-logout-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Карточки */
+.librarian-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Таблицы */
+.librarian-table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.librarian-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.librarian-data-table th {
+    background-color: #3f51b5;
+    color: white;
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.librarian-data-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.librarian-data-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Кнопки */
+.librarian-btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none !important;
+}
+
+.librarian-btn-primary {
+    background-color: #3f51b5;
+    color: white;
+}
+
+.librarian-btn-primary:hover {
+    background-color: #303f9f;
+}
+
+.librarian-btn-secondary {
+    background-color: #757575;
+    color: white;
+}
+
+.librarian-search-btn {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Формы */
+.librarian-search-panel {
+    margin-bottom: 20px;
+}
+
+.librarian-search-box {
+    display: flex;
+    gap: 10px;
+}
+
+.librarian-search-box input {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* Пагинация */
+.librarian-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.librarian-page-info {
+    color: #3f51b5;
+    margin: 0 10px;
+}
+
+/* Информация о студенте */
+.librarian-student-info {
+    padding: 20px;
+}
+
+.librarian-student-name {
+    color: #3f51b5;
+    margin-bottom: 15px;
+}
+
+.librarian-student-meta div {
+    margin-bottom: 8px;
+}
+
+.librarian-student-meta span:first-child {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .librarian-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .librarian-data-table th,
+    .librarian-data-table td {
+        padding: 8px;
+    }
+}
