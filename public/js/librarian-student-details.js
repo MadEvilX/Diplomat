@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         `).join('') : '<tr><td colspan="7">Нет выданных книг</td></tr>';
 
             // Обработчики для кнопок возврата
-            document.querySelectorAll('.return-btn').forEach(btn => {
+            document.querySelectorAll('.librarian-return-btn').forEach(btn => {
                 btn.addEventListener('click', () => returnBook(btn.dataset.id));
             });
 
@@ -79,15 +79,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             });
 
-            if (response.ok) {
-                alert('Книга успешно возвращена');
-                loadStudentData(); // Обновляем данные
-            } else {
-                alert('Ошибка возврата книги');
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error || 'Ошибка сервера');
             }
+
+            const result = await response.json();
+            console.log('Return result:', result);
+
+            alert('Книга успешно возвращена');
+            await loadStudentData(); // Перезагружаем данные
         } catch (err) {
-            console.error('Ошибка:', err);
-            alert('Ошибка соединения');
+            console.error('Ошибка возврата:', err);
+            alert(`Ошибка: ${err.message}`);
         }
     }
 

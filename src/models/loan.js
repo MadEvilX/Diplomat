@@ -56,9 +56,9 @@ class Loan {
     static async return(loanId) {
         const client = await pool.connect();
         try {
+            console.log('Starting book return for loan:', loanId);
             await client.query('BEGIN');
 
-            // 1. Получаем данные о выдаче
             const { rows } = await client.query(
                 `UPDATE book_loans 
              SET return_date = CURRENT_DATE,
@@ -71,18 +71,21 @@ class Loan {
                 [loanId]
             );
 
+            console.log('Updated loan, book_id:', rows[0]?.book_id);
+
             if (rows.length === 0) throw new Error('Выдача не найдена');
 
-            // 2. Увеличиваем количество книг
             await client.query(
                 'UPDATE books SET quantity = quantity + 1 WHERE id = $1',
                 [rows[0].book_id]
             );
 
             await client.query('COMMIT');
+            console.log('Book return completed successfully');
             return rows[0];
         } catch (err) {
             await client.query('ROLLBACK');
+            console.error('Error in return:', err);
             throw err;
         } finally {
             client.release();

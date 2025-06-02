@@ -220,6 +220,6 @@ pool.query('SELECT NOW()')
     });
 
 // Запуск сервера
-app.listen(port, () => {
-    console.log(`Сервер запущен на порту ${port}`);
+app.listen(3000, '0.0.0.0', () => {
+    console.log('Сервер запущен на http://0.0.0.0:3000');
 });

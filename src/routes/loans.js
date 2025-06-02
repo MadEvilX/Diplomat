@@ -40,7 +40,11 @@ router.post('/:id/return', authMiddleware, roleMiddleware(['admin', 'librarian']
         const loan = await Loan.return(req.params.id);
         res.json(loan);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        console.error('Return error:', err);
+        res.status(400).json({
+            error: err.message,
+            stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
     }
 });
 

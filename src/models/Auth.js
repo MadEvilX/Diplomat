@@ -35,7 +35,10 @@ class Auth {
         }
 
         const token = jwt.sign(
-            { userId: user.id, role: user.role },
+            {
+                userId: user.id,
+                role: user.role.toLowerCase() // Приводим роль к нижнему регистру
+            },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
